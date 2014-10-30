@@ -1,0 +1,90 @@
+<div class="dialog large" id="wallet-dialog">
+    <div class="dialog-background"></div>
+    <form id="messagebox-form" method="post" action="?plugin=wallet&action=paymentSave" enctype="multipart/form-data" >
+        <div class="dialog-window">
+            <div class="dialog-content">
+                <div class="dialog-content-indent">
+                    <div class="fields form s-dialog-form">
+
+                        
+                        <!-- GENERAL PAYMENT OPTION PARAMS -->
+                        <div class="field-group">
+
+                            <h1>{$plugin.name|escape}</h1>
+
+                            <div class="field">
+                                <div class="name">
+                                    <label for="s-payment-plugin-status">[`Enabled`]</label>
+                                </div>
+                                <div class="value">
+                                    <input name="payment[id]" type="hidden" value="{$plugin_id|escape}">
+                                    <input name="payment[plugin]" type="hidden" value="{$plugin.plugin|escape}">
+                                    <input name="payment[status]" type="checkbox"{if !empty($plugin.status)} checked="checked"{/if} id="s-payment-plugin-status" value="1">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="name">
+                                    <label for="s-payment-plugin-name">[`Payment option name`]</label>
+                                </div>
+                                <div class="value">
+                                    <input name="payment[name]" type="text" value="{$plugin.name|escape}" class="bold" id="s-payment-plugin-name">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="name">
+                                    <label for="s-payment-plugin-logo">[`Logo URL`]</label>
+                                </div>
+                                <div class="value">
+                                    <input name="payment[logo]" type="text" class="long" value="{$plugin.logo|default:''|escape}" id="s-payment-plugin-logo">
+                                    {if !empty($plugin.logo)}<img src="{$plugin.logo}" style="float:right;">{/if}
+                                    <p class="hint">{sprintf('[`A collection of payment option icons is available for free: <a href="%s" target="_blank">%s</a> <i class="icon10 new-window"></i>`]','[`http://www.webasyst.com/help/729/payment-shipping-icons/`]','[`http://www.webasyst.com/help/729/payment-shipping-icons/`]')}</p>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="name">
+                                    [`Description`]
+                                </div>
+                                <div class="value">
+                                    <textarea name="payment[description]">{$plugin.description|escape}</textarea>
+                                    <p class="hint">[`HTML. Payment option description is shown to customer during the checkout.`]</p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="field-group">
+                            <div class="field">
+                                <div class="name">[`Allowed shipping options`]</div>
+                                <div class="value">
+                                    {foreach $shipping as $p}
+                                        <label><input type="checkbox" name="payment[shipping][{$p.id}]" value="1" {if $p.available} checked="checked"{/if}> {$p.name|escape}</label>
+                                        {if !$p@last}<br>{/if}
+                                    {/foreach}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CUSTOM PAYMENT MODULE PARAMS -->
+                        <div class="field-group">
+                            {$settings_html}
+                        </div>
+
+                        <div class="field-group">
+                            {$guide_html}
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="dialog-buttons">
+                <div class="dialog-buttons-gradient">
+                    <input type="submit" value="Сохранить" class="button green">
+                    или <a class="cancel" href="#">отмена</a>
+                    <span id="dialog-response"></span>
+                </div>
+            </div>
+            {$wa->csrf()}
+        </div>
+    </form>
+</div>
